@@ -24,7 +24,7 @@ public class FileInfoServiceImpl implements FileInfoService {
 
     private FileInfoDao fileInfoDao = new FileInfoDaoImpl();
 
-    public Fileinfo getFileMsg(String fiid) {
+    public Fileinfo getFileMsg(String fiid) throws Exception{
         Fileinfo fileinfo = fileInfoDao.selectFileMsgByFiid(fiid);
         return fileinfo;
     }
@@ -34,7 +34,6 @@ public class FileInfoServiceImpl implements FileInfoService {
         if (!uploadFile.exists()) {
             uploadFile.mkdirs();
         }
-
         DiskFileItemFactory factory = new DiskFileItemFactory();
         //指定在内存中缓存数据大小,单位为byte,这里设为1Mb
         factory.setSizeThreshold(1024 * 1024 * 100);
@@ -65,13 +64,6 @@ public class FileInfoServiceImpl implements FileInfoService {
                 }
                 //如果是上传文件
                 else {
-                    //属性名
-                    String fieldName = item.getFieldName();
-//                    //上传文件路径
-////                    String getfileName = item.getName().getBytes("GBK");
-//                    System.out.println("69++++++"+item.getName());
-//                    String getfileName = new String(item.getName().getBytes("GBK"),"UTF-8");
-//                    System.out.println("###########"+getfileName);
                     //数据库操作
                     //数据文件model
                     Fileinfo fileinfo = new Fileinfo();
@@ -105,11 +97,15 @@ public class FileInfoServiceImpl implements FileInfoService {
                     fileinfo.setFilemail(result);
                     file.delete();
                     fileInfoDao.insertFileinfo(fileinfo);
-
                     response.addHeader("UUID", fiid);
                 }
             }
         }
         return response;
+    }
+
+    public List<Fileinfo> getListMsg() throws Exception {
+        List<Fileinfo> fileinfoListMsg = fileInfoDao.getListMsg();
+        return fileinfoListMsg;
     }
 }

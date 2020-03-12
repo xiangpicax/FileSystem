@@ -18,4 +18,6 @@ public interface FileService {
 
     //下载
     Result download(String fiid, String filemail, String filetype, String filename) throws  Exception;
+
+    ModelAndView getListMsg() throws Exception;
 }

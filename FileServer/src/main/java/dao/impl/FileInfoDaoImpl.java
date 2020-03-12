@@ -5,6 +5,8 @@ import model.Fileinfo;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileInfoDaoImpl implements FileInfoDao {
     private final static Logger logger = Logger.getLogger(FileInfoDaoImpl.class);
@@ -89,5 +91,40 @@ public class FileInfoDaoImpl implements FileInfoDao {
         }
 
         return result;
+    }
+
+    public List<Fileinfo> getListMsg() {
+        List<Fileinfo> fileinfoList = new ArrayList<Fileinfo>();
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            Class.forName("org.apache.derby.jdbc.EmbeddedDriver").newInstance();
+            conn = DriverManager.getConnection("jdbc:derby:"+System.getProperty("user.dir")+"\\Derby_data\\filesysdb");
+            ps = conn.prepareStatement("select  * from FILEDETAILINFO ORDER BY CREATEON DESC  FETCH NEXT 10 ROWS ONLY");
+            rs = ps.executeQuery();
+            while (rs.next()){
+
+               Fileinfo fileinfo =  new Fileinfo(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getDate(5),rs.getString(6),rs.getString(7));
+                System.out.println(fileinfo.toString());
+                fileinfoList.add(fileinfo);
+            }
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                rs.close();
+                ps.close();
+                conn.close();
+            } catch (SQLException e) {
+                logger.info(e.getMessage());
+                e.printStackTrace();
+            }
+        }
+
+        return fileinfoList;
     }
 }

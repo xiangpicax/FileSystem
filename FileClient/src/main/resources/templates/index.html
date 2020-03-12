@@ -2,9 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>测试</title>
+    <title>文件上传</title>
 </head>
 <body>
+<a th:href="getlistmsg">查看最新10条信息</a>
+<br>
 <form method="post" action="/upload" enctype="multipart/form-data" >
     <input type="hidden" name="filename" id="filename" >
     选择文件上传<input type="file" name="file" id="myfile">

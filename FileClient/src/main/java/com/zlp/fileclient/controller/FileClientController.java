@@ -21,6 +21,12 @@ import java.io.*;
 public class FileClientController {
 
     private FileService fileService = new FileServiceImpl();
+    @RequestMapping("index")
+    public ModelAndView index(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+        return modelAndView;
+    }
 
     @RequestMapping("upload")
     public ModelAndView upload(HttpServletRequest request, HttpServletResponse response) {
@@ -64,6 +70,15 @@ public class FileClientController {
         }
 
     }
-
-
+@RequestMapping("getlistmsg")
+public ModelAndView getListMsg(){
+     ModelAndView modelAndView = new ModelAndView();
+    try {
+        modelAndView = fileService.getListMsg();
+    } catch (Exception e) {
+        modelAndView.setViewName("moreFailure");
+        return modelAndView;
+    }
+    return  modelAndView;
+}
 }

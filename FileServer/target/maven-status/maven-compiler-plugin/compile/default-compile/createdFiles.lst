@@ -3,9 +3,9 @@ servlet\DownoadServlet.class
 util\Constants.class
 servlet\GetMsgServlet.class
 util\EncrpyUtil.class
-servlet\HelloServlet.class
 service\FileInfoService.class
 util\RASTool.class
+servlet\GetListMsgServlet.class
 service\impl\FileInfoServiceImpl.class
 dao\FileInfoDao.class
 util\PrivateKeyUtils.class

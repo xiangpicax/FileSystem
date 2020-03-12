@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -176,7 +177,6 @@ public class FileServiceImpl implements FileService {
             System.out.println("下载文件不存在！");
             return null;
         }
-        System.out.println("The response value of token:" + httpResponse.getFirstHeader("token"));
         File file = new File(localFileName);
         if (!file.exists()) {
             file.createNewFile();
@@ -199,5 +199,41 @@ public class FileServiceImpl implements FileService {
         result.setFile(downfile);
         result.setStatus(200);
         return result;
+    }
+
+    @Override
+    public ModelAndView getListMsg() throws Exception {
+        ModelAndView modelAndView = new ModelAndView();
+
+        CloseableHttpClient httpClient = null;
+        CloseableHttpResponse response = null;
+        String entityStr = "";
+        Fileinfo fileinfo = null;
+        httpClient = HttpClients.createDefault();
+        URIBuilder uriBuilder = new URIBuilder("http://localhost:8081/getListMsg");
+        HttpGet httpGet = new HttpGet(uriBuilder.build());
+        String SID = UUID.randomUUID().toString();
+        httpGet.setHeader("X-SID", SID);
+        String sign = SignUtils.sign(SID, Constants.strPrivateKey);
+        httpGet.setHeader("X-Signature", sign);
+        response = httpClient.execute(httpGet);
+        int status = response.getStatusLine().getStatusCode();
+        if (status == 403) {
+            modelAndView.setViewName("failure");
+            modelAndView.addObject("msg", "请求不合法");
+            return modelAndView;
+        }
+        HttpEntity entity = response.getEntity();
+        // 使用Apache提供的工具类进行转换成字符串
+        entityStr = EntityUtils.toString(entity, "UTF-8");
+        System.out.println(entityStr);
+        JSONArray jsonArray = JSON.parseArray(entityStr);
+        List<Fileinfo> fileinfoList = new ArrayList<>();
+        if (jsonArray != null && jsonArray.size() > 0) {
+            fileinfoList = JSONArray.parseArray(jsonArray.toString(), Fileinfo.class);
+        }
+        modelAndView.setViewName("showListMsg");
+        modelAndView.addObject("fileinfoList", fileinfoList);
+        return modelAndView;
     }
 }
