@@ -21,6 +21,11 @@ import java.io.*;
 public class FileClientController {
 
     private FileService fileService = new FileServiceImpl();
+
+    /**
+     * 上传界面接口
+     * @return
+     */
     @RequestMapping("index")
     public ModelAndView index(){
         ModelAndView modelAndView = new ModelAndView();
@@ -28,6 +33,12 @@ public class FileClientController {
         return modelAndView;
     }
 
+    /**
+     * 上传文件接口
+     * @param request
+     * @param response
+     * @return
+     */
     @RequestMapping("upload")
     public ModelAndView upload(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView();
@@ -43,6 +54,16 @@ public class FileClientController {
         }
     }
 
+    /**
+     * 下载文件接口
+     * @param fiid
+     * @param filemail
+     * @param filetype
+     * @param filename
+     * @param response
+     * @param request
+     * @return
+     */
     @RequestMapping(value = "download", method = RequestMethod.GET)
     public ModelAndView download(@RequestParam("fiid") String fiid, @RequestParam("filemail") String filemail, @RequestParam("filetype") String filetype,@RequestParam("filename") String filename,HttpServletResponse response,HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
@@ -70,7 +91,12 @@ public class FileClientController {
         }
 
     }
-@RequestMapping("getlistmsg")
+
+    /**
+     * 获取最近10条信息接口
+     * @return
+     */
+    @RequestMapping("getlistmsg")
 public ModelAndView getListMsg(){
      ModelAndView modelAndView = new ModelAndView();
     try {

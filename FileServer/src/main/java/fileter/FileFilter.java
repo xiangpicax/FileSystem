@@ -19,6 +19,7 @@ public class FileFilter implements Filter {
         System.out.println("@@@@@@我有在拦截哦@@@@@@@");
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         HttpServletRequest httpServletRequest =(HttpServletRequest) request;
+        //对头信息使用公钥进行解签，校对成功放行请求
         String SID = httpServletRequest.getHeader("X-SID");
         String Signature = httpServletRequest.getHeader("X-Signature");
         System.out.println("X-SID"+SID);

@@ -1,6 +1,7 @@
 package servlet;
 
 import model.Fileinfo;
+import org.apache.log4j.Logger;
 import service.FileInfoService;
 import service.impl.FileInfoServiceImpl;
 
@@ -16,7 +17,14 @@ import java.io.*;
 @MultipartConfig
 public class DownoadServlet extends HttpServlet {
     FileInfoService fileInfoService = new FileInfoServiceImpl();
-
+    private final static Logger logger = Logger.getLogger(DownoadServlet.class);
+    /**
+     * 下载文件接口
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -52,6 +60,7 @@ public class DownoadServlet extends HttpServlet {
             out.flush();
             response.addHeader("token", "hello 1");
         } catch (Exception e) {
+            logger.info(e.getMessage());
             e.printStackTrace();
             response.addHeader("token", "hello 2");
         } finally {
@@ -59,12 +68,14 @@ public class DownoadServlet extends HttpServlet {
                 try {
                     in.close();
                 } catch (IOException e) {
+                    logger.info(e.getMessage());
                 }
             }
             if (out != null) {
                 try {
                     out.close();
                 } catch (IOException e) {
+                    logger.info(e.getMessage());
                 }
             }
         }

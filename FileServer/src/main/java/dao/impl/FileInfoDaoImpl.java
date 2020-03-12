@@ -73,12 +73,16 @@ public class FileInfoDaoImpl implements FileInfoDao {
             result = ps.executeUpdate();
 
         } catch (InstantiationException e) {
+            logger.info(e.getMessage());
             e.printStackTrace();
         } catch (IllegalAccessException e) {
+            logger.info(e.getMessage());
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
+            logger.info(e.getMessage());
             e.printStackTrace();
         } catch (SQLException e) {
+            logger.info(e.getMessage());
             e.printStackTrace();
         }finally {
             try {

@@ -1,6 +1,7 @@
 package servlet;
 
 import model.Fileinfo;
+import org.apache.log4j.Logger;
 import service.FileInfoService;
 import service.impl.FileInfoServiceImpl;
 
@@ -12,8 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+/**
+ * 获取单条信息接口
+ */
 @WebServlet("/show")
 public class GetMsgServlet extends HttpServlet {
+    private final static Logger logger = Logger.getLogger(GetMsgServlet.class);
     private FileInfoService fileInfoService = new FileInfoServiceImpl();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -30,6 +35,7 @@ public class GetMsgServlet extends HttpServlet {
             out.println(fileMsg);
             out.close();
         } catch (Exception e) {
+            logger.info(e.getMessage());
             System.out.println(e.getMessage());
         }
 

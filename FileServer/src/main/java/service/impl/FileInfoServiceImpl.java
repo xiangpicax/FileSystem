@@ -6,6 +6,7 @@ import model.Fileinfo;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.log4j.Logger;
 import service.FileInfoService;
 import util.Constants;
 import util.EncrpyUtil;
@@ -21,6 +22,7 @@ import java.util.UUID;
 
 public class FileInfoServiceImpl implements FileInfoService {
 
+    private final static Logger logger = Logger.getLogger(FileInfoServiceImpl.class);
 
     private FileInfoDao fileInfoDao = new FileInfoDaoImpl();
 

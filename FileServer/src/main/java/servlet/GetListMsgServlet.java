@@ -2,6 +2,7 @@ package servlet;
 
 import com.alibaba.fastjson.JSON;
 import model.Fileinfo;
+import org.apache.log4j.Logger;
 import service.FileInfoService;
 import service.impl.FileInfoServiceImpl;
 
@@ -16,7 +17,13 @@ import java.util.List;
 @WebServlet("/getListMsg")
 public class GetListMsgServlet extends HttpServlet {
     private FileInfoService fileInfoService = new FileInfoServiceImpl();
-
+    private final static Logger logger = Logger.getLogger(GetListMsgServlet.class);
+    /**
+     * 获取10条最新上传文件信息接口
+     * @param request
+     * @param response
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("UTF-8");
@@ -26,12 +33,12 @@ public class GetListMsgServlet extends HttpServlet {
         String fiid = request.getParameter("fiid");
         try {
             List<Fileinfo> fileinfoList = fileInfoService.getListMsg();
-            //toString已重写成JSON字符串形式，就不在写Object->json的Util了
+            //toString已重写成JSON字符串形式
             String fileList = JSON.toJSONString(fileinfoList);
             out.println(fileList);
             out.close();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         }
 
     }

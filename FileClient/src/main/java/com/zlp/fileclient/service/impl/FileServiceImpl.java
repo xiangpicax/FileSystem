@@ -47,11 +47,14 @@ public class FileServiceImpl implements FileService {
         Fileinfo fileinfo = null;
         httpClient = HttpClients.createDefault();
         URIBuilder uriBuilder = new URIBuilder("http://localhost:8081/show");
+        //添加查询信息
         uriBuilder.addParameter("fiid", fiid);
         HttpGet httpGet = new HttpGet(uriBuilder.build());
+        //校验接口，添加头信息，并用私钥签名
         String SID = UUID.randomUUID().toString();
         httpGet.setHeader("X-SID", SID);
         String sign = SignUtils.sign(SID, Constants.strPrivateKey);
+        //发起请求
         httpGet.setHeader("X-Signature", sign);
         response = httpClient.execute(httpGet);
         int status = response.getStatusLine().getStatusCode();
@@ -90,12 +93,15 @@ public class FileServiceImpl implements FileService {
         ModelAndView modelAndView = new ModelAndView();
         Part filePart = req.getPart("file");
         String submittedFileName = filePart.getSubmittedFileName();
+        //文件临时存放位置与名称
         String directory = System.getProperty("user.dir") + "\\file\\" + submittedFileName;
+        //写入并读出
         filePart.write(directory);
         File file = new File(directory);
         httpClient = HttpClients.createDefault();
         // 把一个普通参数和文件上传给下面这个地址 是一个servlet
         HttpPost httpPost = new HttpPost("http://localhost:8081/upload");
+        //校验接口，添加头信息，并用私钥签名
         String SID = UUID.randomUUID().toString();
         httpPost.setHeader("X-SID", SID);
         String sign = SignUtils.sign(SID, Constants.strPrivateKey);
@@ -133,7 +139,7 @@ public class FileServiceImpl implements FileService {
         // 销毁
         file.delete();
         EntityUtils.consume(resEntity);
-        //调用查询接口
+        //调用查询单条信息接口
         FileinfoVO getmsg = getmsg(substring);
         if (getmsg.getStatus() == 403) {
             modelAndView.setViewName("failure");
@@ -155,11 +161,13 @@ public class FileServiceImpl implements FileService {
         InputStream in = null;
         File downfile = null;
         HttpGet httpGet = new HttpGet("http://localhost:8081/download");
+        //校验接口，添加头信息，并用私钥签名
         httpGet.addHeader("fileName", fiid);
         String SID = UUID.randomUUID().toString();
         httpGet.setHeader("X-SID", SID);
         String sign = SignUtils.sign(SID, Constants.strPrivateKey);
         httpGet.setHeader("X-Signature", sign);
+        //发起请求
         HttpResponse httpResponse = httpClient.execute(httpGet);
         int status = httpResponse.getStatusLine().getStatusCode();
         if (status == 403) {
@@ -192,9 +200,11 @@ public class FileServiceImpl implements FileService {
         out.flush();
         PrivateKeyUtils privateKeyUtils = new PrivateKeyUtils();
         String replace = filemail.replace(" ", "+");
+        //通过私钥解密文件数字信封解密得到加密原始AES
         String AES = privateKeyUtils.decryptionByPrivateKey(Constants.strPrivateKey, replace);
         File encryFile = new File(localFileName);
         File uploadFile = new File(System.getProperty("user.dir") + "\\file\\" + filename + "." + filetype);
+        //AES解密
         downfile = EncrpyUtil.decryptFile(encryFile, uploadFile, AES);
         result.setFile(downfile);
         result.setStatus(200);
@@ -212,10 +222,12 @@ public class FileServiceImpl implements FileService {
         httpClient = HttpClients.createDefault();
         URIBuilder uriBuilder = new URIBuilder("http://localhost:8081/getListMsg");
         HttpGet httpGet = new HttpGet(uriBuilder.build());
+        //校验接口，添加头信息，并用私钥签名
         String SID = UUID.randomUUID().toString();
         httpGet.setHeader("X-SID", SID);
         String sign = SignUtils.sign(SID, Constants.strPrivateKey);
         httpGet.setHeader("X-Signature", sign);
+        //发请请求
         response = httpClient.execute(httpGet);
         int status = response.getStatusLine().getStatusCode();
         if (status == 403) {
