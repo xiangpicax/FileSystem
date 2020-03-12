@@ -11,11 +11,11 @@ import java.util.List;
 
 public interface FileService {
     //获取单条信息
-    FileinfoVO getmsg(String fiid);
+    FileinfoVO getmsg(String fiid) throws Exception;
 
     //上传
-    ModelAndView upload(HttpServletRequest req);
+    ModelAndView upload(HttpServletRequest req) throws Exception;
 
     //下载
-    Result download(String fiid, String filemail, String filetype, String filename);
+    Result download(String fiid, String filemail, String filetype, String filename) throws  Exception;
 }

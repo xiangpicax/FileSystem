@@ -50,6 +50,10 @@ public class FileClientController {
                 modelAndView.setViewName("failure");
                 modelAndView.addObject("status",result.getStatus());
                 modelAndView.addObject("msg",result.getMsg());
+                return modelAndView;
+            }else if(result.getStatus()==401){
+                modelAndView.setViewName("moreFailure");
+                return modelAndView;
             }
             DownloadUtils.download(response,result.getFile());
             modelAndView.setViewName("DownloadSuccess");
