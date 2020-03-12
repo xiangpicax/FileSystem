@@ -1,0 +1,55 @@
+ @RequestMapping(value = "getFilesDetail", method = RequestMethod.POST)
+    public ApiResult<Map> configDetail(@RequestBody FileNameVO vo) throws IOException {
+        if(!vo.getFileName().isEmpty()&&vo.getFileName()!=null){
+        Resource resource = new ClassPathResource("config");
+        File file = resource.getFile();
+        Map result = new LinkedHashMap();
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files != null && files.length > 0) {
+                for (File listFile : files) {
+                    String fileName1 = listFile.getName();
+                    String fileName2 = fileName1.substring(0, fileName1.lastIndexOf("."));
+                    System.out.println("###########"+fileName2);
+                    System.out.println("@@@@@@@@@@@"+vo.getFileName());
+                    System.out.println(fileName2==vo.getFileName());
+                    if(vo.getFileName().equals(fileName2)){
+                        System.out.println("!!!!!!!!");
+                        String filePath = listFile.getCanonicalPath();
+                        InputStream inputStream = new FileInputStream(filePath);
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
+                        String b = "";
+                        while ((b = bufferedReader.readLine()) != null) {
+                            System.out.println("********"+b);
+                            if (!b.isEmpty()) {
+                                String[] keyValues = b.split("=");
+                                if (keyValues.length > 2) {
+                                    String value = "";
+                                    for (int i = 1; i < keyValues.length; i++) {
+                                        if (i == (keyValues.length - 1)) {
+                                            value = value + keyValues[i];
+                                        } else {
+                                            value = value + keyValues[i] + "=";
+                                        }
+                                    }
+                                    result.put(keyValues[0], value);
+
+                                } else {
+                                    result.put(keyValues[0], keyValues[1]);
+                                }
+                            }
+                        }
+                        return ApiResult.success(result);
+                    }
+                }
+            }
+        }else {
+            return ApiResult.fail("未查到指定目录");
+        }
+            return ApiResult.fail("无相关文件");
+    }else{
+            return ApiResult.fail("filename为空");
+        }
+
+    }
+}

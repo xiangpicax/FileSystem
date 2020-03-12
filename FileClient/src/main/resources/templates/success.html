@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SUCCESS</title>
+</head>
+<body>
+<H1>上传成功</H1>
+<table th:each="i:${file}">
+
+    <tr >
+        <td>文件名称：</td>
+        <td th:text="${file.getFilename()}"></td>
+    </tr>
+    <tr >
+        <td>文件大小：</td>
+        <td th:text="${file.getFilesize()}"></td>
+    </tr>
+    <tr >
+        <td>文件类型：</td>
+        <td th:text="${file.getFiletype()}"></td>
+    </tr>
+    <tr >
+        <td>创建时间：</td>
+        <td th:text="${file.getCreateon()}"></td>
+    </tr>
+    <tr >
+        <td>文件地址：</td>
+        <td th:text="${file.getAddress()}"></td>
+    </tr>
+    <tr >
+        <td>文件加密数字信封：</td>
+        <td th:text="${file.getFilemail()}"></td>
+    </tr>
+</table>
+<a th:href="${file.getDownload()}">下载</a>
+</body>
+<script>
+
+
+</script>
+</html>

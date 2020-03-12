@@ -1,0 +1,5 @@
+scp -r open-falcon root@49.234.131.98:/home/work  nD26c~y4K#M^J
+scp -r agent/ root@49.234.131.98:/home/work
+
+scp -r open-falcon root@49.234.131.215:/home/work  @GX5[Vw)p-6K
+scp -r agent/ root@49.234.131.215:/home/work

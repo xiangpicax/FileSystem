@@ -1,0 +1,64 @@
+
+
+    public static final String KEY_ALGORITHM = "RSA";
+    public static final String SIGNATURE_ALGORITHM = "SHA1WithRSA";
+    public static final String X509 = "X.509";
+    /**
+     * RSA私钥签名
+     *
+     * @param content    待签名数据
+     * @param privateKey 私钥
+     * @return 签名值
+     */
+    public static String signByPrivateKey(String content, String strPrivateKey) {
+        KeyFactory keyFactory = null;
+        PrivateKey privateKey = null;
+        String s = "";
+        try {
+            PKCS8EncodedKeySpec pkcs8EncodedKeySpec5 = new PKCS8EncodedKeySpec(Base64.decodeBase64(strPrivateKey));
+            keyFactory = KeyFactory.getInstance("RSA");
+            privateKey = keyFactory.generatePrivate(pkcs8EncodedKeySpec5);
+            Signature signature = Signature.getInstance("MD5withRSA");
+            signature.initSign(privateKey);
+            signature.update(content.getBytes());
+            byte[] signed = signature.sign();
+             s = Base64.encodeBase64String(signed);
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
+        return s;
+    }
+
+
+    public static void main(String[] args) {
+        String kkkkkk = SignUtils.signByPrivateKey("aaaaa", Constants.strPrivateKey);
+        boolean aaaaa = SignUtils.verifySignByPublicKey("aaaaa", kkkkkk, Constants.strPublicKey);
+        System.out.println(aaaaa);
+    }
+
+    /**
+     * 公钥验签
+     * @param content
+     * @param sign
+     * @param publicKey
+     * @return
+     */
+    public static boolean verifySignByPublicKey(String content, String sign, String strPublicKey) {
+        KeyFactory keyFactory2 = null;
+        PublicKey publicKey2 = null;
+        try {
+            X509EncodedKeySpec x509EncodedKeySpec2 = new X509EncodedKeySpec(Base64.decodeBase64(strPublicKey));
+            keyFactory2 = KeyFactory.getInstance("RSA");
+            publicKey2 = keyFactory2.generatePublic(x509EncodedKeySpec2);
+
+            Signature signature = Signature.getInstance("MD5withRSA");
+            signature.initVerify(publicKey2);
+            signature.update(content.getBytes());
+            Base64.decodeBase64()
+            res = signature.verify(Base64.decode(sign));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }

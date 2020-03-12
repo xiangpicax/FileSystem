@@ -1,0 +1,36 @@
+cd /home/work/open-falcon/
+chmod u+x open-falcon
+chmod u+x agent/bin/falcon-agent
+vi agent/config/cfg.json
+
+
+
+
+
+./open-falcon start agent
+tail -111f agent/logs/agent.log
+
+
+
+{
+    "debug": true,
+    "http": {
+        "listen": "0.0.0.0:4000",
+        "token": ""
+    },
+    "smtp": {
+        "addr": "smtp.exmail.qq.com:465",
+        "username": "Mail@dlg-property.com",
+        "password": "Zhiye365",
+        "from": "Mail@dlg-property.com",
+        "tls":true,
+        "anonymous":false,
+        "skipVerify":true
+    }
+
+
+
+http://127.0.0.1:4000/sender/mail
+./open-falcon restart alarm
+
+
