@@ -36,7 +36,7 @@ public class GetMsgServlet extends HttpServlet {
             out.close();
         } catch (Exception e) {
             logger.info(e.getMessage());
-            System.out.println(e.getMessage());
+            response.setStatus(401);
         }
 
 

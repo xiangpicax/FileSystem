@@ -1,8 +1,8 @@
 util\PublicKeyUtils.class
-servlet\DownoadServlet.class
 util\Constants.class
 servlet\GetMsgServlet.class
 util\EncrpyUtil.class
+servlet\DownloadServlet.class
 service\FileInfoService.class
 util\RASTool.class
 servlet\GetListMsgServlet.class

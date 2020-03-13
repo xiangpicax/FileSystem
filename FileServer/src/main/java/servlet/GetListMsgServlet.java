@@ -38,6 +38,7 @@ public class GetListMsgServlet extends HttpServlet {
             out.println(fileList);
             out.close();
         } catch (Exception e) {
+            response.setStatus(401);
             logger.info(e.getMessage());
         }
 

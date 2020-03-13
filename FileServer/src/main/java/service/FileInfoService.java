@@ -31,5 +31,7 @@ public interface FileInfoService {
      * @throws Exception
      */
     List<Fileinfo> getListMsg() throws Exception;
-    
+
+    void download(HttpServletRequest request, HttpServletResponse response) throws Exception;
+
 }

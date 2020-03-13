@@ -14,7 +14,7 @@ import util.PublicKeyUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
+import java.io.*;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -109,5 +109,54 @@ public class FileInfoServiceImpl implements FileInfoService {
     public List<Fileinfo> getListMsg() throws Exception {
         List<Fileinfo> fileinfoListMsg = fileInfoDao.getListMsg();
         return fileinfoListMsg;
+    }
+
+    public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        int BUFFER_SIZE = 4096;
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            request.setCharacterEncoding("utf-8");
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("application/octet-stream");
+            String fileName = request.getHeader("filename");
+            System.out.println("fileName:" + fileName);
+            Fileinfo fileMsg = getFileMsg(fileName);
+            String downloadPath = fileMsg.getAddress() +"\\"+fileName+"."+fileMsg.getFiletype();
+            System.out.println("downloadPath" + downloadPath);
+            File file = new File(downloadPath);
+            response.setContentLength((int) file.length());
+            response.setHeader("Accept-Ranges", "bytes");
+
+            int readLength = 0;
+
+            in = new BufferedInputStream(new FileInputStream(file), BUFFER_SIZE);
+            out = new BufferedOutputStream(response.getOutputStream());
+
+            byte[] buffer = new byte[BUFFER_SIZE];
+            while ((readLength = in.read(buffer)) > 0) {
+                byte[] bytes = new byte[readLength];
+                System.arraycopy(buffer, 0, bytes, 0, readLength);
+                out.write(bytes);
+            }
+            out.flush();
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    logger.info(e.getMessage());
+                }
+            }
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    logger.info(e.getMessage());
+                }
+            }
+        }
     }
 }
